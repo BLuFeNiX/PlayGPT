@@ -10,14 +10,14 @@ Runs a sharable ChatGPT docker container using the [acheong08/ChatGPT](https://g
 ## Usage
 
 ```
-./run.sh [--public]
+./run.sh
 ```
 
 You can also pass any arg that `tty-share` accepts to customize your setup.
 
 Ex:
 ```
-./run.sh --public --no-wait --headless --headless-cols 160 --headless-rows 50
+./run.sh --public --headless --headless-cols 160 --headless-rows 50
 ```
 
 ### Interacting with ChatGPT
@@ -27,7 +27,7 @@ You can directly use the terminal prompt to interact, as seen here:
 ```
 ================================================================
 Starting docker container
-args: --public --no-wait
+args: --public
 ================================================================
 public session: https://on.tty-share.com/s/REDACTED/
 local session: http://172.17.0.2:8000/s/local/
