@@ -2,6 +2,7 @@
 
 import json
 import textwrap
+import shutil
 from svglib.svglib import svg2rlg
 from colorama import Fore
 from colorama import Style
@@ -43,12 +44,14 @@ def get_input(prompt):
 
 def main():
     try:
+        term_cols,_ = shutil.get_terminal_size((80, 25))
+
         with open("config.json", encoding="utf-8") as f:
             config = json.load(f)
 
         print("Logging in...")
         chatbot = Chatbot(config, debug=False, captcha_solver=CaptchaSolver())
-        print("Welcome to the game! Begin by entering an initial prompt for the AI. Press [enter] twice to submit all responses.")
+        print("Welcome to the game! Begin by entering an initial prompt for the AI.\nNOTE: You must press [enter] TWICE to submit messages.")
 
         while True:
 
@@ -71,7 +74,7 @@ def main():
                     # Wrap each part separately
                     formatted_parts = []
                     for part in message_parts:
-                        formatted_parts.extend(textwrap.wrap(part, width=80, replace_whitespace=False, break_long_words=False))
+                        formatted_parts.extend(textwrap.wrap(part, width=term_cols, replace_whitespace=False, break_long_words=False))
                         for _ in formatted_parts:
                             if len(formatted_parts) > lines_printed + 1:
                                 print(formatted_parts[lines_printed])

@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
 set -eEuo pipefail
 
-# build
+echo "================================================================"
+echo "Building docker image"
+echo "================================================================"
+
 docker build . \
     -t chatgpt \
     --build-arg HOST_UID=$UID
 
-# run
+echo "================================================================"
+echo "Starting docker container"
+echo "args: $@"
+echo "================================================================"
+
 docker run \
     -it \
     --rm \
     -v ${PWD}/game:/home/user/game \
-    --entrypoint tty-share \
+    --entrypoint /home/user/game/host.sh \
     chatgpt \
-    --command /home/user/game/play.sh \
     $@
