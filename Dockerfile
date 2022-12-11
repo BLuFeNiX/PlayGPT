@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ---------------------------------------------------
 # Install tty-share
 # ---------------------------------------------------
-# && go get github.com/go-bindata/go-bindata/... \
 
 WORKDIR /root
 ENV GOPATH=/go
