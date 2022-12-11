@@ -8,7 +8,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	python3 \
 	python-is-python3 \
 	python3-pip \
+	golang-go \
+	go-bindata \
+	git \
  && rm -rf /var/lib/apt/lists/*
+
+
+# ---------------------------------------------------
+# Install tty-share
+# ---------------------------------------------------
+# && go get github.com/go-bindata/go-bindata/... \
+
+WORKDIR /root
+ENV GOPATH=/go
+ENV GOBIN=/go/bin
+RUN git clone https://github.com/elisescu/tty-share.git \
+&& cd tty-share \
+&& go-bindata --prefix server/frontend/static -o gobindata.go server/frontend/static/* \
+&& go build \
+&& cp tty-share /usr/bin/ \
+&& rm -r $GOPATH
 
 
 # ---------------------------------------------------
@@ -19,6 +38,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ARG HOST_UID=1000
 RUN useradd -m -u ${HOST_UID} user
 USER user
+ENV USER=user
+ENV HOME=/home/user
+WORKDIR /home/user
 
 # ---------------------------------------------------
 # Install pip packages
