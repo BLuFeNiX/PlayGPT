@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import textwrap
 from svglib.svglib import svg2rlg
 from colorama import Fore
 from colorama import Style
@@ -56,17 +57,32 @@ def main():
             print(f"{Style.RESET_ALL}", end='');
             
             try:
-                chars_printed = 0
+                lines_printed = 0
+                formatted_parts = []
                 for message in chatbot.get_chat_response(prompt, output="stream"):
-                    chunk = message["message"][chars_printed:]
-                    print(f"{Fore.CYAN}{chunk}{Style.RESET_ALL}", end='', flush=True);
-                    chars_printed += len(chunk)
-                print("\n")
+                    # replace double newlines with a newline and a NULL
+                    # this will let us swap them back to preserve paragraphs
+                    msg = message["message"].replace('\n\n', '\n\0')
+                    # Split the message by newlines
+                    message_parts = msg.split("\n")
+                    # restore extra newlines
+                    message_parts = [x.replace('\0', '\n') for x in message_parts]
+
+                    # Wrap each part separately
+                    formatted_parts = []
+                    for part in message_parts:
+                        formatted_parts.extend(textwrap.wrap(part, width=80, replace_whitespace=False, break_long_words=False))
+                        for _ in formatted_parts:
+                            if len(formatted_parts) > lines_printed + 1:
+                                print(formatted_parts[lines_printed])
+                                lines_printed += 1
+                print(formatted_parts[lines_printed])
+                print(f"{Style.RESET_ALL}")
             except Exception as e:
                 print("Response not in correct format!")
                 print(e)
                 continue
-                
+
     except Exception as exc:
         print("Something went wrong!")
         print(exc)
