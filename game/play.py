@@ -6,6 +6,7 @@ import shutil
 from svglib.svglib import svg2rlg
 from colorama import Fore
 from colorama import Style
+import readline
 
 from itertools import islice
 from random import randint
@@ -35,9 +36,8 @@ class CaptchaSolver:
 def get_input(prompt):
     # prompt for input
     lines = []
-    print(prompt, end="")
     while True:
-        line = input()
+        line = input(prompt)
         if line == "":
             break
         lines.append(line)
