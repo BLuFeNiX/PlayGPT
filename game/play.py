@@ -13,6 +13,8 @@ from time import sleep
 
 from revChatGPT.revChatGPT import Chatbot
 
+config_path = "config.json"
+
 class CaptchaSolver:
     """
     Captcha solver
@@ -62,16 +64,25 @@ class FakeChatbot:
             else:
                 break
 
+
+def refresh_token(chatbot, config):
+    chatbot.refresh_session()
+    print(f"{Fore.YELLOW}Session refreshed.\n{Style.RESET_ALL}")
+    with open(config_path, 'w', encoding="utf-8") as f:
+        f.write(json.dumps(config, indent=4))
+    print(f"{Fore.YELLOW}config.json saved.\n{Style.RESET_ALL}")
+
+
 def main():
     try:
         term_cols,_ = shutil.get_terminal_size((80, 25))
-        config_path = "config.json"
 
         with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
 
         print("Logging in...")
         chatbot = Chatbot(config, debug=False, captcha_solver=CaptchaSolver())
+        refresh_token(chatbot, config)
         print("Welcome to the game! Begin by entering an initial prompt for the AI.\nNOTE: You must press [enter] TWICE to submit messages.\n")
 
         while True:
@@ -99,11 +110,7 @@ def main():
                     print(f"{Fore.YELLOW}Chat session reset.\n{Style.RESET_ALL}")
                     continue
                 elif prompt == "!refresh":
-                    chatbot.refresh_session()
-                    print(f"{Fore.YELLOW}Session refreshed.\n{Style.RESET_ALL}")
-                    with open(config_path, 'w', encoding="utf-8") as f:
-                        f.write(json.dumps(config, indent=4))
-                    print(f"{Fore.YELLOW}config.json saved.\n{Style.RESET_ALL}")
+                    refresh_token(chatbot, config);
                     continue
                 # this is broken upstream, so disabled
                 # elif prompt.startswith("!rollback"):
