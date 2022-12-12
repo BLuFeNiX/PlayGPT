@@ -1,6 +1,8 @@
-# chatgpt_multiplayer
+# PlayGPT
 
 Runs a sharable ChatGPT docker container using the [acheong08/ChatGPT](https://github.com/acheong08/ChatGPT) API and [elisescu/tty-share](https://github.com/elisescu/tty-share).
+
+This allows you to share a terminal screen (TTY) with your friends, and interact with ChatGPT together.
 
 ## Setup
 
