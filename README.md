@@ -10,7 +10,7 @@ Runs a sharable ChatGPT docker container using the [acheong08/ChatGPT](https://g
 ## Usage
 
 ```
-./run.sh
+./run.sh [--public] [--headless] [--readonly]
 ```
 
 You can also pass any arg that `tty-share` accepts to customize your setup.

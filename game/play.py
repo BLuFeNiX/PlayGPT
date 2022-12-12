@@ -7,6 +7,10 @@ from svglib.svglib import svg2rlg
 from colorama import Fore
 from colorama import Style
 
+from itertools import islice
+from random import randint
+from time import sleep
+
 from revChatGPT.revChatGPT import Chatbot
 
 class CaptchaSolver:
@@ -41,6 +45,22 @@ def get_input(prompt):
     # print(user_input)
     return user_input
 
+class FakeChatbot:
+    def __init__(*args, **kwargs):
+        pass
+    def get_chat_response(self, input, rmin=1, rmax=5, delay=0.01, output=None):
+        reply = []
+        it = iter(f"You told me this!\n\n{input}\n\nThanks for chatting!")
+        while True:
+            token = list(islice(it,randint(rmin,rmax)))
+            if token:
+                reply += token
+                ret = dict()
+                ret['message'] = ''.join(reply)
+                sleep(delay)
+                yield ret
+            else:
+                break
 
 def main():
     try:
@@ -51,7 +71,7 @@ def main():
 
         print("Logging in...")
         chatbot = Chatbot(config, debug=False, captcha_solver=CaptchaSolver())
-        print("Welcome to the game! Begin by entering an initial prompt for the AI.\nNOTE: You must press [enter] TWICE to submit messages.")
+        print("Welcome to the game! Begin by entering an initial prompt for the AI.\nNOTE: You must press [enter] TWICE to submit messages.\n")
 
         while True:
 
@@ -89,7 +109,7 @@ def main():
     except Exception as exc:
         print("Something went wrong!")
         print(exc)
-        exit()
+        exit(1)
 
 
 if __name__ == "__main__":

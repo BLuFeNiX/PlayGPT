@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	golang-go \
 	go-bindata \
 	git \
+	tmux \
  && rm -rf /var/lib/apt/lists/*
 
 
@@ -46,7 +47,7 @@ WORKDIR /home/user
 # ---------------------------------------------------
 
 ENV PATH="$PATH:/home/user/.local/bin"
-RUN pip3 install revChatGPT colorama --upgrade
+RUN pip3 install revChatGPT colorama svglib --upgrade
 
 
 # ---------------------------------------------------
