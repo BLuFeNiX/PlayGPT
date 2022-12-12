@@ -16,4 +16,6 @@ tmux new-session 'python3 play.py || tail -f' \; \
 	set -g status 2 \; \
 	set -g status-format[0] "#[align=centre]$GAME_TITLE" \; \
 	set -g status-format[1] "#[align=centre]$GAME_TITLE_2" \; \
-	set -g mouse on
+	set -g mouse on \; \
+	bind -n C-c display-message "To copy text: hold shift while highlighting, then right-click -> copy!" \; \
+	unbind -n MouseDown3Pane
