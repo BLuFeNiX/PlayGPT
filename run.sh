@@ -17,7 +17,7 @@ echo "================================================================"
 docker run \
     -it \
     --rm \
-    -v ${PWD}/game:/home/user/game \
+    -v ${PWD}/game:/home/user/game:rw \
     --entrypoint /home/user/game/host.sh \
     chatgpt \
     $@

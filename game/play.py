@@ -65,8 +65,9 @@ class FakeChatbot:
 def main():
     try:
         term_cols,_ = shutil.get_terminal_size((80, 25))
+        config_path = "config.json"
 
-        with open("config.json", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             config = json.load(f)
 
         print("Logging in...")
@@ -78,6 +79,43 @@ def main():
             print(f"{Style.DIM}", end='');
             prompt = get_input("> ")
             print(f"{Style.RESET_ALL}", end='');
+
+            if prompt.startswith("!"):
+                if prompt == "!help":
+                    print(textwrap.dedent(
+                        f"""\
+                            {Fore.YELLOW}
+                            !help - Show this message
+                            !reset - Forget the current conversation
+                            !refresh - Refresh the session authentication
+                            !rollback <num> - Rollback the conversation by <num> message(s); <num> is optional, defaults to 1
+                            !config - Show the current configuration
+                            !exit - Exit the program
+                            {Style.RESET_ALL}"""
+                    ))
+                    continue
+                elif prompt == "!reset":
+                    chatbot.reset_chat()
+                    print(f"{Fore.YELLOW}Chat session reset.\n{Style.RESET_ALL}")
+                    continue
+                elif prompt == "!refresh":
+                    chatbot.refresh_session()
+                    print(f"{Fore.YELLOW}Session refreshed.\n{Style.RESET_ALL}")
+                    with open(config_path, 'w', encoding="utf-8") as f:
+                        f.write(json.dumps(config, indent=4))
+                    print(f"{Fore.YELLOW}config.json saved.\n{Style.RESET_ALL}")
+                    continue
+                # this is broken upstream, so disabled
+                # elif prompt.startswith("!rollback"):
+                #     try:
+                #         num = int(prompt.split(" ")[1])  # Get the number of messages to rollback
+                #     except IndexError:
+                #         num = 1
+                #     chatbot.rollback_conversation(num)
+                #     print(f"{Fore.YELLOW}Chat session rolled back {num} message(s).\n{Style.RESET_ALL}")
+                #     continue
+                elif prompt == "!exit":
+                    break
             
             try:
                 lines_printed = 0
