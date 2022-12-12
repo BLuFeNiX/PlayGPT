@@ -1,4 +1,4 @@
-# chatgpt
+# chatgpt_multiplayer
 
 Runs a sharable ChatGPT docker container using the [acheong08/ChatGPT](https://github.com/acheong08/ChatGPT) API and [elisescu/tty-share](https://github.com/elisescu/tty-share).
 
